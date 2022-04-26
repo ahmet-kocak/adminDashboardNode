@@ -6,13 +6,16 @@ const logger = require('morgan');
 const mongoose=require("mongoose")
 require('dotenv').config()
 var cors = require('cors');
-var postRoutes=require("./routes/post.router")
+var regRoutes=require("./routes/userSignup.router")
+var logRoutes=require("./routes/userSignin.router")
+var authRoutes=require("./routes/auth.router")
 
 
 const app = express();
 
 
 app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,10 +35,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("coding ahmet");
-}); 
-app.use("/posts", postRoutes);
+ 
+app.use("/", authRoutes); 
+app.use("/register", regRoutes);
+app.use("/login", logRoutes);
+app.use("/dashboard", authRoutes);
 
 
 var db=require("./db")()
